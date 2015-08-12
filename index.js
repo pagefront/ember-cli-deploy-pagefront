@@ -14,6 +14,15 @@ var findFile = require('./lib/find-file');
 var PAGEFRONTRC = '.pagefrontrc';
 var INDEX = 'index.html';
 
+function mungeRelease(release) {
+  return {
+    revision: release.attributes.version,
+    version: 'v' + release.attributes.version,
+    timestamp: new Date(release.attributes.created_at).getTime(),
+    active: false
+  };
+}
+
 module.exports = {
   name: 'ember-cli-deploy-pagefront',
 
@@ -32,6 +41,18 @@ module.exports = {
       configure: function(context) {
         this._super.configure.call(this, context);
         this.api = new API(this.readConfig('key'));
+      },
+
+      fetchRevisions: function(context) {
+        var app = this.readConfig('app');
+
+        return this.api.listReleases(app).then(function(payload) {
+          context.revisions = payload.map(mungeRelease);
+
+          if (context.revisions.length) {
+            context.revisions[0].active = true;
+          }
+        });
       },
 
       upload: function(context) {
