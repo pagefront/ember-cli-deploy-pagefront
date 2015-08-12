@@ -55,6 +55,16 @@ module.exports = {
         });
       },
 
+      activate: function(context) {
+        var app = this.readConfig('app');
+        var revision = context.commandOptions.revision;
+        var didActivate = this._didActivate.bind(this, revision);
+
+        return this.api.createRelease(app, {
+          release: revision
+        }).then(didActivate);
+      },
+
       upload: function(context) {
         var app = this.readConfig('app');
         var manifestPath = joinPath(context.distDir, context.manifestPath);
@@ -104,6 +114,10 @@ module.exports = {
 
       _didUploadIndex: function(release) {
         this.log('released v' + release.attributes.version);
+      },
+
+      _didActivate: function(version) {
+        this.log('activated v' + version);
       }
     });
 
