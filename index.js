@@ -113,7 +113,9 @@ module.exports = {
       },
 
       _didUploadIndex: function(release) {
-        this.log('released v' + release.attributes.version);
+        var url = 'https://' + this.readConfig('app') + '.pagefrontapp.com';
+
+        this.log('released v' + release.attributes.version + ' to ' + url);
       },
 
       _didActivate: function(version) {
