@@ -43,6 +43,10 @@ module.exports = {
         this.api = new API(this.readConfig('key'));
       },
 
+      willDeploy: function(context) {
+        this.log('Preparing for deploy...', { color: 'white' });
+      },
+
       fetchRevisions: function(context) {
         var app = this.readConfig('app');
 
@@ -98,7 +102,7 @@ module.exports = {
       },
 
       _didUploadAssets: function(assets) {
-        this.log('uploaded ' + assets.length + ' assets');
+        this.log('Uploaded ' + assets.length + ' assets', { color: 'white' });
       },
 
       _uploadIndex: function(app, manifest, index) {
@@ -115,11 +119,11 @@ module.exports = {
       _didUploadIndex: function(release) {
         var url = 'https://' + this.readConfig('app') + '.pagefrontapp.com';
 
-        this.log('released v' + release.attributes.version + ' to ' + url);
+        this.log('Success! Released v' + release.attributes.version + ' to ' + url, { color: 'green' });
       },
 
       _didActivate: function(version) {
-        this.log('activated v' + version);
+        this.log('Success! Activated v' + version, { color: 'green' });
       }
     });
 
