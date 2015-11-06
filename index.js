@@ -9,7 +9,6 @@ var joinPath = require('path').join;
 var API = require('./lib/api');
 var uploadAsset = require('./lib/upload-asset');
 var fetchCommit = require('./lib/fetch-commit');
-var findFile = require('./lib/find-file');
 
 var INDEX = 'index.html';
 
