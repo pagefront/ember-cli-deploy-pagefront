@@ -11,7 +11,6 @@ var uploadAsset = require('./lib/upload-asset');
 var fetchCommit = require('./lib/fetch-commit');
 var findFile = require('./lib/find-file');
 
-var PAGEFRONTRC = '.pagefrontrc';
 var INDEX = 'index.html';
 
 function mungeRelease(release) {
@@ -30,13 +29,6 @@ module.exports = {
     var Plugin = PluginBase.extend({
       name: options.name,
       requiredConfig: ['app', 'key'],
-      defaultConfig: {
-        key: function() {
-          var rawPagefrontrc = readFileSync(findFile(PAGEFRONTRC));
-
-          return JSON.parse(rawPagefrontrc).key
-        }
-      },
 
       configure: function(context) {
         this._super.configure.call(this, context);
