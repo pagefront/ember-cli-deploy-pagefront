@@ -93,7 +93,9 @@ module.exports = {
       },
 
       _didUploadAssets: function(assets) {
-        this.log('Uploaded ' + assets.length + ' assets', { color: 'white' });
+        var inflected = assets.length === 1 ? 'asset' : 'assets';
+
+        this.log('Uploaded ' + assets.length + ' ' + inflected, { color: 'white' });
       },
 
       _uploadIndex: function(app, manifest, index) {
