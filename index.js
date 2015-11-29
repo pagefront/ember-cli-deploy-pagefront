@@ -12,7 +12,7 @@ var fetchCommit = require('./lib/fetch-commit');
 
 var INDEX = 'index.html';
 
-var MISSING_KEY = 'Pagefront API key not found. Please login using `ember login` or set the PAGEFRONT_KEY environment variable.\n';
+var MISSING_KEY = 'Pagefront API key not found. Please log in using `ember login` or set the PAGEFRONT_KEY environment variable.\n';
 
 function mungeRelease(release) {
   return {
