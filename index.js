@@ -12,6 +12,8 @@ var fetchCommit = require('./lib/fetch-commit');
 
 var INDEX = 'index.html';
 
+var MISSING_KEY = 'Pagefront API key not found. Please login using `ember login` or set the PAGEFRONT_KEY environment variable.\n';
+
 function mungeRelease(release) {
   return {
     revision: release.attributes.version,
@@ -30,6 +32,10 @@ module.exports = {
       requiredConfig: ['app', 'key'],
 
       configure: function(context) {
+        if (!this.pluginConfig.key) {
+          return Promise.reject(MISSING_KEY);
+        }
+
         this._super.configure.call(this, context);
         this.api = new API(this.readConfig('key'));
       },
