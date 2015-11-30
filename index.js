@@ -11,8 +11,10 @@ var uploadAsset = require('./lib/upload-asset');
 var fetchCommit = require('./lib/fetch-commit');
 
 var INDEX = 'index.html';
-
-var MISSING_KEY = 'Pagefront API key not found. Please log in using `ember login` or set the PAGEFRONT_KEY environment variable.\n';
+var NEW_LINE = '\n';
+var MISSING_KEY = 'Pagefront API key not found. Please log in using `ember login` or set the PAGEFRONT_KEY environment variable.' + NEW_LINE;
+var INVALID_ENVIRONMENT = 'Environment must be one of: production, staging, development' + NEW_LINE;
+var VALID_ENVIRONMENTS = ['production', 'staging', 'development'];
 
 function mungeRelease(release) {
   return {
@@ -21,6 +23,16 @@ function mungeRelease(release) {
     timestamp: new Date(release.attributes.created_at).getTime(),
     active: false
   };
+}
+
+function validEnvironment(environment) {
+  return VALID_ENVIRONMENTS.indexOf(environment) > -1;
+}
+
+function urlFor(app, environment) {
+ var subdomain = environment === 'production' ? app : app + '.' + environment;
+
+ return 'https://' + subdomain + '.pagefrontapp.com';
 }
 
 module.exports = {
@@ -32,6 +44,10 @@ module.exports = {
       requiredConfig: ['app', 'key'],
 
       configure: function(context) {
+        if (!validEnvironment(context.deployTarget)) {
+          return Promise.reject(INVALID_ENVIRONMENT);
+        }
+
         if (!this.pluginConfig.key) {
           return Promise.reject(MISSING_KEY);
         }
@@ -74,7 +90,7 @@ module.exports = {
         var index = readFileSync(indexPath).toString();
         var uploadAssets = this._uploadAssets.bind(this, context.distDir);
         var didUploadAssets = this._didUploadAssets.bind(this);
-        var uploadIndex = this._uploadIndex.bind(this, app, manifest, index);
+        var uploadIndex = this._uploadIndex.bind(this, app, context.deployTarget, manifest, index);
         var didUploadIndex = this._didUploadIndex.bind(this);
 
         return this._createDifference(app, manifest)
@@ -104,11 +120,12 @@ module.exports = {
         this.log('Uploaded ' + assets.length + ' ' + inflected, { color: 'white' });
       },
 
-      _uploadIndex: function(app, manifest, index) {
+      _uploadIndex: function(app, environment, manifest, index) {
         var commit = fetchCommit();
 
         return this.api.createRelease(app, {
           index: index,
+          environment: environment,
           commit_sha: commit.sha,
           commit_message: commit.message,
           manifest: manifest
@@ -116,7 +133,7 @@ module.exports = {
       },
 
       _didUploadIndex: function(release) {
-        var url = 'https://' + this.readConfig('app') + '.pagefrontapp.com';
+        var url = urlFor(this.readConfig('app'), release.attributes.environment);
 
         this.log('Success! Released v' + release.attributes.version + ' to ' + url, { color: 'green' });
       },
