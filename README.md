@@ -1,5 +1,7 @@
 # Ember-cli-deploy-pagefront
 
++[![](https://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/plugins/ember-cli-deploy-pagefront.svg)](http://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/)
+
 This README outlines the details of collaborating on this Ember addon.
 
 ## Installation
