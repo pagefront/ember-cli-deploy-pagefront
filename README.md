@@ -1,27 +1,5 @@
-# Ember-cli-deploy-pagefront
+# ember-cli-deploy-pagefront
 
 +[![](https://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/plugins/ember-cli-deploy-pagefront.svg)](http://ember-cli-deploy.github.io/ember-cli-deploy-version-badges/)
 
-This README outlines the details of collaborating on this Ember addon.
-
-## Installation
-
-* `git clone` this repository
-* `npm install`
-* `bower install`
-
-## Running
-
-* `ember server`
-* Visit your app at http://localhost:4200.
-
-## Running Tests
-
-* `ember test`
-* `ember test --server`
-
-## Building
-
-* `ember build`
-
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+This plugin is only meant to be used as part of the [ember-pagefront](https://github.com/pagefront/ember-pagefront) addon. Please check out that addon if you are looking to deploy with [Pagefront](https://www.pagefronthq.com/).
