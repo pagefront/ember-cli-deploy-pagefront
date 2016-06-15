@@ -88,7 +88,7 @@ module.exports = {
         var manifest = readFileSync(manifestPath).toString().split("\n");
         var indexPath = joinPath(context.distDir, INDEX);
         var index = readFileSync(indexPath).toString();
-        var uploadAssets = this._uploadAssets.bind(this, context.distDir);
+        var uploadAssets = this._uploadAssets.bind(this, context.distDir, context.gzippedFiles);
         var didUploadAssets = this._didUploadAssets.bind(this);
         var uploadIndex = this._uploadIndex.bind(this, app, context.deployTarget, manifest, index);
         var didUploadIndex = this._didUploadIndex.bind(this);
@@ -106,9 +106,9 @@ module.exports = {
         });
       },
 
-      _uploadAssets: function(distDir, diff) {
+      _uploadAssets: function(distDir, gzippedFiles, diff) {
         var uploads = diff.attributes.missing.map(function(asset) {
-          return uploadAsset(distDir, asset);
+          return uploadAsset(distDir, asset, gzippedFiles && gzippedFiles.indexOf(asset.name) > -1);
         });
 
         return Promise.all(uploads);
