@@ -2,7 +2,7 @@
 'use strict';
 
 var PluginBase = require('ember-cli-deploy-plugin');
-var Promise = require('ember-cli/lib/ext/promise');
+var RSVP = require('RSVP');
 var readFileSync = require('fs').readFileSync;
 var joinPath = require('path').join;
 
@@ -45,11 +45,11 @@ module.exports = {
 
       configure: function(context) {
         if (!validEnvironment(context.deployTarget)) {
-          return Promise.reject(INVALID_ENVIRONMENT);
+          return RSVP.reject(INVALID_ENVIRONMENT);
         }
 
         if (!this.pluginConfig.key) {
-          return Promise.reject(MISSING_KEY);
+          return RSVP.reject(MISSING_KEY);
         }
 
         this._super.configure.call(this, context);
@@ -111,7 +111,7 @@ module.exports = {
           return uploadAsset(distDir, asset, gzippedFiles && gzippedFiles.indexOf(asset.name) > -1);
         });
 
-        return Promise.all(uploads);
+        return RSVP.all(uploads);
       },
 
       _didUploadAssets: function(assets) {
